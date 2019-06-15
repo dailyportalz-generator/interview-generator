@@ -2,16 +2,9 @@
 <template>
   <form @submit.prevent="handleSubmit" class="input-question">
     <dl>
-      <dt>まず、相手の名前と敬称を入れてください。</dt>
+      <dt>{{message}}</dt>
       <dd>
-        <input v-model="name" type="text" required> <select v-model="title" required>
-        <option :value="1">さま</option>
-        <option :value="2">様</option>
-        <option :value="3">殿</option>
-        <option :value="4">さん</option>
-        <option :value="5">くん</option>
-        <option :value="6">ちゃん</option>
-      </select>
+        <input v-model="name" type="text" required>
       </dd>
     </dl>
     <button>次へ</button>
@@ -24,26 +17,21 @@
     data () {
       return {
         name: ' ',
-        title: 4,
       }
+    },
+    props: {
+      message: String,
     },
     methods: {
       handleSubmit () {
-        this.$emit('start', {
-          name: this.name,
-          title: this.title,
-        })
+        this.$emit('input', this.name)
+        this.$emit('next')
       },
     },
   }
 </script>
 
 <style scoped>
-  .input-question {
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: dotted 1px #c6c6c6;
-  }
 
   h3 {
     font-size: 1em;

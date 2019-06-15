@@ -1,39 +1,15 @@
 <template>
-  <div class="oyasumi-result">
-    <div class="oyasumi-result_main">
-      <img src="@/assets/waku_up.gif" alt>
-      <div style="display: flex;align-items: stretch">
-        <img src="@/assets/waku_left.gif" alt>
-        <div class="oyasumi-result__message">
-          <p v-if="step">
-            {{questions.name}} {{titleList[questions.title-1]}}
-          </p>
-          <template v-for="(results, questionNumber) in resultsList">
-            <p v-if="step > questionNumber+1" :key="questionNumber">
-              <template v-for="(result, resultIndex) in results">
-                <span :key="result" v-if="questions[`q${questionNumber+1}`] === resultIndex+1">{{result}}</span>
-              </template>
-            </p>
-          </template>
-        </div>
-        <img src="@/assets/waku_left.gif" alt>
-      </div>
-      <img src="@/assets/waku_down.gif" alt>
-    </div>
-  </div>
+  <div class="result">result</div>
 </template>
 
 <script>
   import { stringify } from 'querystring'
   export default {
     props: {
-      questions: Object,
-      step: Number
+      questions:Object
     },
     computed: {
-      titleList() {
-        return [ 'さま', '様', '殿', 'さん', 'くん', 'ちゃん' ]
-      },
+
       resultsList() {
         return [
           [
@@ -84,40 +60,5 @@
 </script>
 
 <style scoped>
-  img {
-    user-select: none;
-  }
-  .oyasumi-result {
-    width: 526px;
-    margin: 0 auto;
-  }
-  .oyasumi-result_main {
-    font-size: 0;
-  }
-  .oyasumi-result__message {
-    padding: 16px;
-    font-size: 12px;
-    flex: 1;
-    min-height: 150px;
-  }
-  .oyasumi-result__message p:first-child {
-    margin-top: 0;
-  }
-  .oyasumi-result_build {
-    text-align: right;
-  }
-  .oyasumi-result_share {
-    font-size: 12px;
-  }
-  .oyasumi-result_shareurl {
-    width: 100%;
-  }
-  .oyasumi-result_share {
-    display: flex;
-    align-items: center;
-  }
-  input {
-    margin: 4px 10px 4px 0;
-    flex: 1;
-  }
+
 </style>

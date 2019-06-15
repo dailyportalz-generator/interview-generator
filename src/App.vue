@@ -1,79 +1,84 @@
 <template>
   <div id="app">
-    <OyasumiHeader/>
     <span v-if="step < 7"><b>step{{step+1}}</b></span>
-    <InputQuestion
-      key="start"
-      v-if="step === 0"
-      @start="handleStart"
-    />
 
-    <SelectQuestion
+    <RadioInterview
       key="question1"
-      v-if="step === 1"
+      v-if="step === 0"
       v-model="questions.q1"
       @next="handleNext"
-      :message="messageList[0]"
+      :message="questionsList[0]"
       :choices="choicesList[0]"
     />
 
-    <SelectQuestion
+
+    <RadioInterview
       key="question2"
-      v-if="step === 2"
+      v-if="step === 1"
       v-model="questions.q2"
       @next="handleNext"
-      :message="messageList[1]"
+      :message="questionsList[1]"
       :choices="choicesList[1]"
     />
 
-    <SelectQuestion
+    <RadioInterview
       key="question3"
-      v-if="step === 3"
+      v-if="step === 2"
       v-model="questions.q3"
       @next="handleNext"
-      :message="messageList[2]"
+      :message="questionsList[2]"
       :choices="choicesList[2]"
     />
 
-    <SelectQuestion
+    <RadioInterview
       key="question4"
-      v-if="step === 4"
+      v-if="step === 3"
       v-model="questions.q4"
       @next="handleNext"
-      :message="messageList[3]"
+      :message="questionsList[3]"
       :choices="choicesList[3]"
     />
 
-    <SelectQuestion
+    <RadioInterview
       key="question5"
-      v-if="step === 5"
+      v-if="step === 4"
       v-model="questions.q5"
       @next="handleNext"
-      :message="messageList[4]"
+      :message="questionsList[4]"
       :choices="choicesList[4]"
     />
-
-    <SelectQuestion
+    <InputQuestion
       key="question6"
-      v-if="step === 6"
+      v-if="step === 5"
       v-model="questions.q6"
       @next="handleNext"
-      :message="messageList[5]"
+      :message="questionsList[5]"
       :choices="choicesList[5]"
     />
-
-    <OyasumiResult
-      :questions="questions"
-      :step="step"
+    <RadioInterview
+      key="question7"
+      v-if="step === 6"
+      v-model="questions.q7"
+      @next="handleNext"
+      :message="questionsList[6]"
+      :choices="choicesList[6]"
     />
+
+    <Result
+      v-if="step === 7"
+      :questions="questions"
+    />
+
+
   </div>
 </template>
 
 <script>
-  import OyasumiHeader from './components/OyasumiHeader.vue';
-  import InputQuestion from './components/InputQuestion.vue';
   import SelectQuestion from './components/SelectQuestion.vue';
-  import OyasumiResult from './components/OyasumiResult.vue';
+  import InputQuestion from './components/InputQuestion.vue';
+  import RadioInterview from './components/RadioInterview.vue';
+  import Result from './components/Result.vue';
+
   import {parse} from 'querystring';
 
   export default {
@@ -82,26 +87,25 @@
       return {
         step: 0,
         questions: {
-          name: '',
-          title: 1,
           q1: 1,
           q2: 1,
           q3: 1,
           q4: 1,
           q5: 1,
           q6: 1,
+          q7: 1,
         },
       };
     },
     components: {
-      OyasumiHeader,
-      InputQuestion,
       SelectQuestion,
-      OyasumiResult,
+      RadioInterview,
+      InputQuestion,
+      Result,
     },
     mounted() {
       const params = parse(location.search.replace('?', ''));
-      const isValid = ['name', 'title', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6'].every((val) => {
+      const isValid = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6','q7'].every((val) => {
         if (!params[val]) {
           return false;
         }
@@ -115,11 +119,7 @@
           name: params.name,
           title: parseInt(params.title),
           q1: parseInt(params.q1),
-          q2: parseInt(params.q2),
-          q3: parseInt(params.q3),
-          q4: parseInt(params.q4),
-          q5: parseInt(params.q5),
-          q6: parseInt(params.q6),
+
         };
         this.questions = questions;
         this.step = 7;
@@ -136,24 +136,100 @@
       },
     },
     computed: {
-      messageList() {
+      questionsList() {
         return [
-          'では、書き出しはどうしましょうか。',
-          'なるほど、どうやって切り出しますか',
-          'どれくらい休みますか',
-          '言いわけいれておきますか',
-          '仕事はどうしますか',
-          'では、しめのフレーズをどうぞ',
+          '好きな食べ物は？',
+          '最近いつ食べましたか？',
+          'どこのが好きとかそういうのありますか？',
+          'そのメニューは' +
+          this.dishChoice.join('と') +
+          'に分けられると思うのですが、どっちが大事だと思いますか？',
+          '関係ないですが、ご趣味は？',
+          '好きな言葉を書いてください',
+          'こんどはいつ食べますか？',
         ];
+      },
+      dishChoice() {
+        let commonValue = ['どっちも好きだ','分けられない'];
+        const values = [
+          null,
+          [
+            '麺',
+            'スープ',
+          ],
+          [
+            'ルー',
+            'ごはん',
+          ],
+          [
+            'ネタ',
+            '酢飯'
+          ],
+          [
+            '具材',
+            '皮'
+          ],
+          [
+            '肉',
+            '衣'
+          ],
+
+          [
+            'ちくわ',
+            'チーズ'
+          ]
+        ]
+        return [
+          ...values[this.questions.q1], //q1 = 1~6
+          ...commonValue
+        ]
       },
       choicesList() {
         return [
-          ['まじめに', 'フレンドリーに', 'エスプリをきかせて', '病気が辛そうな感じで'],
-          ['単刀直入に', '低姿勢に', 'スイートに', 'ものすごい辛そうな感じで'],
-          ['１日', '１日なんだけど、半日って言っておく', 'しばらく', 'もうわからないぐらい'],
-          ['自分のせい', '会社のせい', '猫のせい', '宇宙のせい'],
-          ['まじめなところを見せる', '逃げる', '同僚に押し付け', 'ひらきなおり'],
-          ['ふつうに', '辛そうに', 'ちょっと冗談を交えつつ', 'イタリア人みたく'],
+          [
+            'ラーメン',
+            'カレー',
+            '寿司',
+            'ウインナー',
+            'からあげ',
+            'チーちく',
+          ],
+          [
+            '今日',
+            '今週',
+            '今月',
+            '今年',
+            'ずっと前',
+            '実は食べたことがない',
+          ],
+          [
+            '自分で作るもの',
+            '親が作ってくれたもの',
+            '道ばたに落ちてたもの',
+            '特定のお店',
+            'どこのでもいいんだよ',
+            'うまいものにあったことがないんだ',
+          ],
+          this.dishChoice,
+          [
+            '音楽',
+            '読書',
+            '旅行',
+            'スポーツ',
+            'インターネット',
+            'お笑い番組を見る',
+          ],
+          [
+          ],
+          [
+            '今日',
+            'あした',
+            '今週中',
+            '今月中',
+            '今年中',
+            'わからない',
+          ],
+
         ];
       },
     },
