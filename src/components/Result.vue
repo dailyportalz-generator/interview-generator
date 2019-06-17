@@ -1,50 +1,53 @@
 <template>
   <div class="result">
     <div class="result-header">
-      <h5 style="color: #FF6600;margin: 0 0 .5em;font-size: 12px;">完成です</h5>
+      <h5 style="color: #f60;margin: 0 0 .5em;font-size: 12px;">完成です</h5>
 
       <p>あなたのインタビューができました。「好きな食べもの」についてです。ではどうぞ。</p>
     </div>
     <div class="result-body">
       <template v-for="(results, questionNumber) in resultsList">
-          <template v-for="(result, resultIndex) in results">
-            <dl class="result-body__list" v-if="questions[`q${questionNumber+1}`] === resultIndex+1">
-              <dt>{{questionTitle[`${questionNumber}`]}}</dt>
-              <dd class="answer" :key="result">{{result}}</dd>
-            </dl>
-
-            <dl class="result-body__list" v-else="questionNumber ===  5">
-              <dt>{{questionTitle[`${questionNumber}`]}}</dt>
-              <dd class="answer" :key="result">{{result}}</dd>
-            </dl>
-
-          </template>
+        <template v-for="(result, resultIndex) in results">
+          <dl class="result-body__list" v-if="questions[`q${questionNumber+1}`] === resultIndex+1">
+            <dt>{{questionTitle[`${questionNumber}`]}}</dt>
+            <dd class="answer" :key="result">{{result}}</dd>
+          </dl>
+        </template>
+        <dl class="result-body__list" v-if="questionNumber ===  5">
+          <dt>{{questionTitle['5']}}</dt>
+          <dd class="answer">{{resultsList['5']}}</dd>
+        </dl>
       </template>
 
-
+      <dl class="result-body__list">
+        <dt>－－－今日はどうもありがとうございました。</dt>
+        <dd class="answer">こちらこそ。</dd>
+      </dl>
     </div>
+    <a href="https://backnumber.dailyportalz.jp/2008/09/12/a/index.htm" style="border-top: 1px dotted;border-bottom: 1px dotted; display: block;text-decoration: none ;text-align: center">TOPへ戻る</a>
   </div>
 </template>
 
 <script>
-  import { stringify } from 'querystring'
+  import {stringify} from 'querystring';
+
   export default {
     props: {
-      questions:Object,
-      dishChoice:Object
+      questions: Object,
+      dishChoice: Object,
     },
     computed: {
-      questionTitle(){
+      questionTitle() {
         return [
           '－－－今回は「好物」ということでいろんなかたにお話を聞いているんですが、まず好きな食べ物を教えてもらえますか。',
           '－－－なるほど。やっぱりしょっちゅう食べたりするものなんでしょうか？ ',
           '－－－どこのがいちばんお好きですか？',
-          '－－－ '+ this.dishChoice.join('と') +' に分かれると思うんですが、どっちが好きですか？ ',
+          '－－－ ' + this.dishChoice.join('と') + ' に分かれると思うんですが、どっちが好きですか？ ',
           '－－－ その魅力をうまく説明してもらえないでしょうか',
           '－－－ うーん、もっと読者に伝わるような、なにかわかりやすい説明はないでしょうか ',
           '－－－ では最後に、こんどいつ食べるかを教えてもらっていいですか。',
           '－－－今日はどうもありがとうございました。',
-        ]
+        ];
       },
       resultsList() {
         return [
@@ -72,8 +75,9 @@
             '好きなんだけど、まだ納得できる味には出会ってないんだ。美味しいと思うんだけど「こんなものじゃない」って声がするんだ。もうひとりの自分が言ってるのかな。もしくは隣の席の人。',
           ],
           [
-            'そんなこと考えたこともなかった。たしかにふたつに分けられるね。なるほど、どっちが好きなんだろう………。（ためらったように）やっぱり'+ this.dishChoice[0] +'かな',
-            'ふたつに？ 材料としてはたしかに二種類に分けられるね。ふたつか…（かみしめるように）ユニークな考え方だと思うよ。その考え方に則るならば私はためらいなく'+ this.dishChoice[1] +'をとるだろう。意外かな？',
+            'そんなこと考えたこともなかった。たしかにふたつに分けられるね。なるほど、どっちが好きなんだろう………。（ためらったように）やっぱり' + this.dishChoice[0] + 'かな',
+            'ふたつに？ 材料としてはたしかに二種類に分けられるね。ふたつか…（かみしめるように）ユニークな考え方だと思うよ。その考え方に則るならば私はためらいなく' + this.dishChoice[1] +
+            'をとるだろう。意外かな？',
             '難しい質問だね。（しばらく外を見ながら考えている） どっちとも言えないな。どちらかがそこに「ない」なんて考えられない。そんなことを考えると渋谷に出てきてしまった猿のような悲しい気持ちになる。',
             '君は僕にどちらかを選ばせたいのだと思うんだけど、その質問に意味があるとは思えないな。ものごとがすべて二項対立で考えられるなんて思わないほうがいい。',
 
@@ -86,7 +90,7 @@
             'ちょうどはまったのがインターネットが出始めのころだったんだよね。世界中に拡大するインターネットのように僕の脳内はそれのことでいっぱいなんだ。夜も100Mbpsさ。',
             'お笑い番組が好きでよく見てるんだけど、半分ぐらい面白くない。たまに面白いぐらいでさ。でも、なんとなくつけちゃう。それでいて見てない。そんな空気みたいな感じって言えばわかってもらえるかな。',
           ],
-          'そうだなあ。ひとことで言うと「 '+ this.questions.q6 +' 」かなあ。',
+          'そうだなあ。ひとことで言うと「 ' + this.questions.q6 + ' 」かなあ。',
           [
             'もちろん食べるさ。このあとすぐ食べるよ。いまも話をしながらどこで食べようか、どうやって食べようか考えていたんだ。だから話をほとんど聞いてなかった。ごめん。',
             'あした食べることになっているんだ。楽しみで手帳も書いてある（と言って手帳を開いて見せてくれた）。しかし今週の予定これだけかー。思ったよりも暇なんだな。',
@@ -94,45 +98,48 @@
             '話をしていたらほんとにそれが好きなのかどうか分からなくなってきてしまったんだけど、うーん、今月中には食べちゃうんじゃないかなあ。',
             'わからないけど、きっと年が変わるまでには食べる機会があると思うよ。（窓の外を眺めながら）あの木の葉っぱが全て落ちる前までには。プッププクー。',
             'そんなことわからないな。実はそんなに好きじゃないんだ。',
-          ]
-        ]
-      }
+          ],
+        ];
+      },
     },
     methods: {
       handleClickRestart() {
-        location.href = location.href.replace(location.search, '')
-      }
-    }
-  }
+        location.href = location.href.replace(location.search, '');
+      },
+    },
+  };
 </script>
 
 
 <style scoped>
-  dd{
+  dd {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  .result-header{
+  .result{
+    margin-bottom: 30px;
+  }
+  .result-header {
     width: 320px;
     margin: 0 auto 20px;
     border: 1px solid;
     padding: 10px;
   }
-  .result-body{
+  .result-body {
     width: 320px;
     margin: 0 auto;
     border: 1px solid;
     padding: 10px;
 
   }
-  .result-body__list{
+  .result-body__list {
     margin-bottom: 20px;
   }
-  .question-title{
+  .question-title {
 
   }
-  .answer{
-    color: #CC0000;
+  .answer {
+    color: #c00;
   }
 </style>
