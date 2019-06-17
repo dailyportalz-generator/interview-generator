@@ -67,6 +67,7 @@
     <Result
       v-if="step === 7"
       :questions="questions"
+      :dishChoice="dishChoice"
     />
 
 
@@ -245,7 +246,7 @@
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
+    color: #000;
     max-width: 640px;
     font-size: 12px;
     padding: 0 50px;
